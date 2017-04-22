@@ -1,0 +1,482 @@
+\documentclass[a4paper, 12pt, titlepage]{article}
+\setlength\topmargin{-0.5in}
+\setlength\headheight{0in}
+\setlength\headsep{0in}
+\setlength\textheight{10in}
+\setlength\textwidth{6.5in}
+\setlength\oddsidemargin{0in}
+\setlength\evensidemargin{0in}
+
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage{graphicx}
+\usepackage{enumerate}
+\usepackage[numbib]{tocbibind}
+\usepackage{amsmath}
+%\usepackage[T1]{fontenc}
+
+%\begin{titlepage}
+%\begin{center}
+\title{\textbf{Investigating the Security Level of Encryption Methods in the Deep Web}}
+\author{Philip Nassr \\[15pt] Supervisor: Dr John Power}
+%\publishers{Tutor: Dr John Power}
+\date{\today}
+%\end{center}
+%\end{titlepage}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\section{Problem Description}
+
+\subsection{General Information}
+The Web has been around for many years. A common misconception is that the Web is the Internet - the Web is actually one of the very few things the Internet offers. It is a shared network space available to the public, where documents and pages are identified by a Uniform Resource Locator (URL). Its primary usage is for resource sharing, communication and collaboration, information gathering, and entertainment \cite{IntVsWeb}.\\[6pt]
+With all the fancy features provided by the Internet, security has always been an issue. To begin with, one should always consider the type of information shared. Sharing sensitive information such as home address or bank account number poses a personal security at risk. However, online payment and delivery services have been present for quite long and indeed require these sensitive details. To make such actions as safe as possible, several encryption methods are used to avoid data exposure or theft. Of course there have been multiple cases of account thefts that became part of the underground economy of cyber criminals \cite{DWBook}. Details on how to minimise the risk will be discussed further. Anonymous browsing is another form of security. Anonymity is when a user cannot be directly identified by a third party when surfing the Web. The IP address and user requests are encrypted and if there is a man in the middle, be it an eavesdropper or hacker, work needs to be done to decrypt them. This can be achieved via proxy servers, Virtual Private Networking (VPN) and programmes such as TOR (The Onion Router). The project's main focus will be on how the TOR browser and other I2P networks work, what makes them secure and the ethical issues that surround them.
+
+\subsection{Encryption}
+It would be sensible to start with a basic introduction to encryption, as this is the key to data security. Encryption refers to the process of encoding information in such a way that it cannot be intercepted by a third party unless it has a special key to decrpyt it. Cryptography, on the other hand, is the study of these encoding techniques. There are two known types of encryption: symmetric and public.
+
+\subsubsection{Symmetric Key Encryption}
+This is the type of encryption, where the same key is used for both encrypting and decrypting a message. Due to that, the key's safety is a top priority so that the encoded messages do not get revealed. Advanced Encryption Scheme (AES) is a popular example of such an algorithm \cite{AESEncryption, PKCryptography}. The diagram below illustrates the method straightforward.
+
+\begin{center}
+\item Plaintext $\rightarrow$ Encryption with key \textit{k} $\rightarrow$ Ciphertext
+\item Ciphertext $\rightarrow$ Decryption with key \textit{k} $\rightarrow$ Plaintext
+\end{center}
+
+\subsubsection{Public Key Encryption}
+For this technique two keys are used: public and private. The public key can be given to anyone, but the private must be kept for yourself. It means that a pair of people can exchange public keys and communicate safely even if a man in the middle intercepts them. This is because both public and private keys are mathematically related - it allows the participants to communicate their public keys in the open initially, and then securely after the initial exchange using each individual's private key (p. 3) \cite{PKCryptography}. Imagine we have two participants, e.g. Alice and Bob, that would like to exchange a message securely, and Eve, who is an eavesdropper and wants to reveal their encoded information \cite{PKCryptography}. Their communication is illustrated in Figure 1.
+
+\begin{center}
+\includegraphics[width = 0.6\textwidth]{Public_Key_Communication.png}
+\captionof{figure}{Public Key Communication \cite{PKCryptography} \\[6pt]}
+\label{fig:PKC}
+\end{center}
+It can be seen that Bob generates a pair of keys and shares his public one with to everybody, including Eve, but only him knowing the private one. Thus, anyone can send him an encrypted message using the public key, but only Bob will be able to decrypt it using the secret (private) key. Since Eve does not know Bob's private key, she cannot easily reveal their communication, but with passive listening and consistency, she could use Bob's public key to decrypt Alice's messages using her own private key. This is one of the major public encryption bottlenecks that could be solved using digital signatures and certificates. This will be discussed further.
+
+\subsection{Into the Deep Web}
+The Internet used on a daily basis is referred to as the clear/surface web. It is commonly accessed by the public for social networking, watching videos, reading news and much more. The Deep Web is anything that cannot be indexed by a search engine. In order to understand it better, I will give a popular example. If you imagine the Internet as an iceberg in the middle of the ocean, what you see above the water surface is the clear web. Everything below the water level, no matter how deep it goes, is known as the deep web. It is a subset of the Internet that is not accessible by major search engines such as Google and Bing. This is due to the Internet's nature of being too large to be completely covered by the engines. For example, databases for most of the web pages contain sensitive and confidential data, that cannot and should not be found by a search engine - this part of a website is the Deep Web (p. 2) \cite{InsideDW}. \textit{`With its myriad databases and hidden content, this deep Web is an important yet largely unexplored frontier for information search (p. 96) \cite{Access}.'} Figure 2 shows a conceptual representation of the deep web site \textit{bn.com/}. \\[6pt]
+
+\begin{center}
+\includegraphics[width = 0.6\textwidth]{BN_DW.png}
+\captionof{figure}{Site, databases, and interface (p. 97) \cite{Access} \\[6pt]}
+\label{fig:BN}
+\end{center}
+As illustrated, the website provides several web databases (book and music given as examples), accessed through multiple query interfaces, including simple and advanced search. In addition, this proves that just because it is deep does not mean it is illegal. Most of the content is accessible, but is kept to private via encryption. This is very useful when storing sensitive data. For example, when sharing your bank account details, its password-protected bits, such as card number, CVV, and address, are stored in the deep web. Due to the nature of the content, a lot of users surfing ``below the water level" would prefer to stay anonymous. As mentioned, there are several methods to achieve anonymity with the TOR browser being the most popular one \cite{TheTORProject}. \\[6pt]
+According to the official TOR website, the Onion Router is an Internet networking protocol designed to anonymize the data relayed across it. It was originally developed by the U.S. Department of Defense for the purpose of protecting government communications, but it is now an open source volunteer-run project (p. 3) \cite{InsideDW}. Inside, a user cannot be located by an IP address, neither can data collectors like Google Ads perform traffic analysis on the user's internet habits \cite{MGtoDW}. It runs through computer servers of thousands of volunteers (relays) spread across the world. If a request for a page is given at a specific geographical position (e.g. Bath, UK), the page's server will see the request to be given from completely different location (e.g. New Zealand). TOR strips away part of the packet's header, which could be used to learn things about the sender such as the operating system from which the message was sent. The rest of the addressing information is encrypted via a packet wrapper. Figure 3 illustrates how Tor works in general. \\[6pt]
+
+\begin{center}
+\includegraphics[width = 0.6\textwidth]{How_Tor_Works.png}
+\captionof{figure}{Tor Illustrated \cite{TheTORProject} \\[6pt]}
+\label{fig:Tor}
+\end{center}
+Each relay decrypts only enough of the data packet wrapper to know which relay the data came from and which one to send it to next. The relay then rewraps the package in a new wrapper and sends it on. Apart from government officials, individuals use the browser to prevent websites from tracking their location. Journalists, on the other hand, use it to publish more sensitive media and communicate safely. \begin{quote} \emph{The variety of people who use Tor is actually part of what makes it so secure. Tor hides you among the other users on the network, so the more populous and diverse the user base for Tor is, the more your anonymity will be protected \cite{PowerFreedom}.} \end{quote}
+
+\subsection{The Dark Web}
+In this section the Dark Web will be explored. It is generally considered that the 'Deep' and the 'Dark' web to mean the same thing, whereas in fact it does not. The Dark Web is a subset of the Deep Web and is restricted in addition to being non-indexed (Figure 4). It is the part of the Internet that cannot be accessed using a mainstream browser such as Google Chrome or Firefox. A proxy software is required such as Tor, I2P and Freenet (Tor will be the primary focus). Figure 2 illustrates the different 'layers' of the Internet.
+
+\begin{center}
+\includegraphics[width = 0.6\textwidth]{Deep_vs_Dark_Web.png}
+\captionof{figure}{The Internet 'layers' \cite{IntvsDeepvsDark} \\[6pt]}
+\label{fig:Dark}
+\end{center}
+The Dark Web is usually associated with criminal activities like drug dealing, arms supply, counterfeit documents, pedophilia and CP (Child Pornography). Due to its nature of anonymity, such actions are easily carried out, however, legitimate uses are also present - it is much larger and more diverse than these illegal activities. According to Zach Brooke (2016), the illegal services make up only about 1.5\% of Tor's total traffic (p. 24) \cite{MGtoDW}. The key thing here is the concept of privacy - people are much more vulnerable in the clear web, where it is full of means to be tracked down and monitored by third parties. Examples include Flash player, cookies, IP addresses and Geolocation. Everyone has the equal right to keep his/her identity hidden in the Internet for security reasons. It is a great medium for journalists, activists, and victims of domestic abuse, that would have consequences if they share anything in regards to it (p. 1223) \cite{PowerFreedom}. This diversity of audience forms the so-called DWSN (Dark Web Social Networking). It is an equivalent of Facebook or Twitter, with excessive freedom due to anonymity (although not perfect). According to Rath (2014), even \textit{``Tor's executive director is working with victims of domestic abuse who need to communicate without being tracked by their abusers. Tor is also used by Chinese dissidents who can't access sites like Twitter. And it became a valuable tool during the Arab Spring. (p. 1223) \cite{PowerFreedom}"} \\[6pt]
+The stated facts in the previous and the upcoming paragraph are summarized by Gehl in his book 'Power/Freedom on the Dark Web' \cite{PowerFreedom}. The idea of social networking in the Dark Web, however, is not quite the same as what people are used to in social websites. Facebook, for example, is associated with people's identity, friends, messages, likes, and comments. Socialising on the dark side of the Internet is much more about freedom of speech without revealing your true identity. The DWSN's rules and regulations actually state that noone should reveal personal information about themselves. While this facilitates the freedom of speech, it is technically a requirement that everyone must adhere to. Yes, it might sound like a paradox, but the DWSN does have its own TOS (Terms of Service) and privacy policy. This is what part of the 'Hacker's Manifesto' (i.e. Privacy Policy)  in regards to identity states:
+
+\begin{quote}
+\textit{This is our world now … the world of the electron and the switch, the beauty of the baud …
+We exist without skin color, without nationality, without religious bias … and you call us
+criminals …. Yes, I am a criminal. My crime is that of curiosity. My crime is that of judging
+people by what they say and think, not what they look like. (p. 1225) \cite{PowerFreedom}}
+\end{quote}
+The admin continues:
+\begin{quote}
+\textit{Tell me who you ARE not WHO you are. [DWSN] isn't all about anonymity, it's about soul.
+It’s about putting a piece of yourself out there for the world to see that you otherwise would
+have been too hesitant to allow others to witness in a traditional setting. (p. 1225) \cite{PowerFreedom}}
+\end{quote}
+The admin's speech asserts that people should be judged by what they do, not by their age, gender, appearance, or sexual orientation. Just because they have decided not to reveal their true identity does not mean they are criminals. More discussion in this area will follow.
+
+\subsection{Aim}
+\begin{enumerate}
+\item{Investigate in detail the work behind the Deep Web and how it operates.}
+\item{Research the encryption methods used within, what makes them so secure, gaps and areas for improvement.}
+\item{Discuss the ethical issues around the 'Hidden part of the Internet'. - which bit of the deep web is considered illegal, how to browse safely without imposing law enforcement.}
+\item{Implement a real-time programme that would measure the level of security of a user browsing in Tor.}
+\end{enumerate}
+
+\subsection{Objectives}
+Since this is a research-based project, the primary objective would be to extend existing researches on the Deep Web and cyber security. It is hoped new conclusions are reached and there is a potential implementation of a real-time security measurement programme. The objectives are divided into primary and secondary, depending on their priority.
+\subsubsection{Primary Objectives}
+\begin{enumerate}
+\item{Discuss and research the TOR Project - history, aims, current state. (Aim 1)}
+\item{Distinguish between the 'Deep' and the 'Dark' Web - common misconception. (Aim 3)}
+\item{Relate and discuss case studies - history of cyber security, the Enigma Machine. (Aim 1)}
+\item{Investigate the issues with anonymous browsing - legal and ethical issues. (Aim 2)}
+\item{Compare and Differentiate the encryption methods for anonymity - public vs. private key encryption, cryptanalysis, algorithm efficiency and complexity. (Aim 4)}
+\item{Investigate cyber attacks and the tricks performed in technical aspect - SQL Injection, authentication bypassing. (Aim 2)}
+\item{Evaluate the results from the attacks and based on them, measure the level of browser security and think of ways of improvement. (Aim 4)}
+\end{enumerate}
+
+\subsubsection{Secondary Objectives}
+\begin{enumerate}
+\item{Examine the use of cryptocurrency (e.g. Bitcoins) - how safe they are, is it worth having a Bitcoin wallet, currency mining. (Aim 3)}
+\item{Experiment with modern encryption - SSL, HTTPS, Firewalls. (Aim 4)}
+\item{Experiment with attacks and think of additional improvements to the real-time programme. (Aim 4)}
+\end{enumerate}
+
+\section{Ancient History to WWII}
+The Dark Web topic is very broad and the focus will be on its technical aspects. This includes in detail how browsers like Tor work, the encryption methods used within, what are their pros and cons and how could they be potentially improved. Much research needs to be carried out and the plan is to start with some background history and glimpse into the secure communication methods in the past. We will start by looking at some classic encryption methods used years BC to modern techniques applied nowadays.
+
+\subsection{The Caesar Cipher}
+Also known as the shift cipher, it is one of the simplest encryption methods. It is named after Julius Caeser, who used it frequently to communicate with his allies. Each character in a message is substituted with a letter that is some number of positions down the alphabet. The number of possible encryptions using this cipher is n-1, where n is the number of characters in an alphabet - for example, the English alphabet has 26 letters, so the number of possible key encodings would be 25 (26 as a key would result in the original text). It is defined by the equations
+
+\begin{equation*}
+E_{n}(x) = (x + s) \;  mod \; 26
+\end{equation*}
+\begin{equation*}
+D_{n}(x) = (x - s) \; mod \; 26
+\end{equation*}
+where $E_{n}(x)$ is the encryption function and $D_{n}(x)$ the decryption respectively - \textit{x} is each character in the plaintext and \textit{s} is the amount of shifts. For example, if we have the plaintext \textit{``Hello, my name is John Doe"} and \textit{s}=4, the ciphertext would be \textit{``Lipps qc rwqi Nslr Hsi"}. This is one of the least secure encryption methods, since it is very easy to guess the key. Even brute forcing is not really time consuming and could happen in a matter of milliseconds if one has the technology to speed up the process \cite{CaesarCipher}. One would rather not use it in modern systems, so stronger encryption techniques had to be invented.
+
+\subsection{The One Time Pad}
+This is an enhanced version of the Caesar cipher. It has an element of randomness, which makes it immune to frequency analysis. In a message, every character is shifted a random amount. The result is a key with the same length as the original plaintext and random frequency distribution. A character can have 25 possible keys using the English alphabet, but the keyspace grows exponentially for each character in the message. It is defined by the formula $N^m$, where $N$ is the number of letters in the alphabet and $m$ is the number of characters in the message. So if we use the name 'Spring' as an example, there will be $26^6$ possibilities for message encryption. Every character is shifted a random amount, which is why the cipher is called 'One Time Pad' - the key cannot be used more than once due to the element of randomness. This method was a giant breakthrough for encryption and kept a really high security level until the era of modern computers, which managed to break it. The technique's main downside is that the key size is identical to the length of the original message. Moreover, the key can be easily exploited unless a true random algorithm is used for its generation \cite{OneTimePad}. \\[6pt]
+Obviously the encryption methods discussed above show that they are quite easy to break, so many more have been developed throughout human history, such as the Playfair, Transposition, and Four-Square cipher. They all have their strengths and bottlenecks, but the more interesting one that made a revolution in the area of data security and communication, is the Enigma Machine.
+
+\subsection{The Enigma Machine}
+This is probably the most famous encrypting device in world history. It was used by the Germans during World War II for more secure message transmission. Most of the communication was done via radio, so encryption was vital in order the Allied forces not to understand their conversation. The encryption scheme was much stronger than older methods such as the Caeser and block cipher, the One Time Pad, etc. It remained unbroken for many years, until a fatal flaw in the system was discovered, which aided in the victory over the Nazis.
+
+\subsubsection{How the Machine Works}
+Part of the information in this paragraph is taken from the article \textit{A First Semester Freshman Project: The ENIGMA Encryption System in C}, which briefly explains how the machine works \cite{EnigmaInC}. The Enigma Machine consists of a keyboard, a set of lights for each letter in the alphabet (a lightboard), three to five rotors (a small wheel that would spin around and calculate a letter to substitute for each character in the message), and a plug board at the bottom. The algorithm works by typing a letter and for each letter, a corresponding one would light up on the light board. For each key press, the rotors would move, perform the appropriate letter substitutes, and eventually send the message to the recipient. The letters are scrambled with the plug board, which switched pairs of letters around adding a significant amount of complexity, and then encrypting the message with rotors, which move each character in the message as mentioned previously. One can type the same letter continuously, but Enigma would output a bunch of different individual letters (p. 44, How the Enigma Works) \cite{EnigmaInC}. To decode the message, one needs to know what rotor and plug board settings are used to encrypt the message. These settings are accomplished with monthly sheets - different codes would be used daily and they would get a new sheet at the end of each month. The allies' aim was to get the code sheet and understand the Germans' communication, without them knowing. Figure 5 shows the journey of a single letter in the Enigma. \\[6pt]
+
+\begin{center}
+\includegraphics[width = 0.6\textwidth]{Enigma_Scheme.png}
+\captionof{figure}{An Enigma Emulator \cite{TheEnigma} \\[6pt]}
+\label{fig:Enigma}
+\end{center}
+There have actually been various models of the cipher machine, developed before and during WWII. Development started in 1915 with the invention of the Rotor Machine, the glow lamp Enigma in 1924, and many more variations until the Engima M3 and M4, created in 1942 by the German Navy and used until the end of the war \cite{EnigmaVersions}. Its design has inspired the development of other machines such as the American KL-7 and the Russian Fialka \cite{EnigmaVersions}. More information about the Enigma can be found in Louise Dade's (2016) website, including emulator source code, key generators, mechanics, etc. \cite{TheEnigma}. The ``Classic Project" by Nick Smith contains information about Wehrmacht Enigma I and its descendants \cite{ClassicEnigma}.
+
+\subsubsection{Cracking the Enigma Code}
+The machine had a very complicated encryption scheme, however, it was not perfect and was eventually broken. The plug board was an old telephone style mapping between letter pairs, making the two letters swap before being sent into the rotors for encryption. This added a crazy moment of mathematical redundancy to the Enigma, but at the same time allowed for an important weakness to be discovered. In particular, the machine's design did not allow for a character to be encoded into itself (p. 44, How the Enigma Works) \cite{EnigmaInC}. The flaw eventually led to the deduction of some plug positions. Assuming that no other problems were found (e.g. two plugs pointing to the same letter), one could brute-force the plug positions without having to try all of the possible options. So the Allies had to build a device to automate the process of decrypting messages daily, thus giving birth to 'The Bombe'. 
+
+\begin{quote}
+\textit{Despite increased complexity being added to the system with everchanging daily key settings and auxiliary documents, Enigma was eventually broken, not so much because of any technical flaws in the design of the system, but more due to the capture of codebooks on 9 May 1941 from German U-boat U-110 as well as procedural malpractices by Enigma operators (p. 43) \cite{ClassicEnigma}.} \\[6pt]
+\end{quote}
+The Bombe was designed by Alan Turing and Gordon Welchman and took the form of emulating several hundred Enigma rotors, as well as functioning like a logical electrical circuit to automate the deductions needed to rule out the flawed possible attempts. Its invention took place at Bletchley Park Mansion, Milton Keynes, the centre of Allied code breaking during World War II, currently turned into a history museum. Around 150 Bombes had been built by 1944. To give a simple example, imagine you have the Nazi's broadcasting weather report every morning encrypted by the Enigma code. This was done in the same format daily, but with a different code sheet. Later, the Germans switched to five rotor machines and double-encrypting messages, but the British caught up with them very quickly. At some point the Allies even improved the Enigma cipher concept by fixing the issue of letters not being able to be mapped to themselves. In the end, the Bombe was better than the Enigma itself, the Nazis could not crack it and essentially led to their loss in the war \cite{ClassicEnigma}. \\[6pt]
+More sophisticated systems are required to keep information nowadays as secure as possible. The next section will focus on modern encryption systems by providing examples and relevant case studies.
+
+\section{Modern Encryption}
+With the Internet entering homes in the 90s, followed by its large commerce, data traffic starts growing hugely. Data packets are constatntly sent between devices, protocols and standards are being developed. So far so good, but what about data security - how can data be transferred securely so that it does not get tracked, revealed, or stolen? There needs to be some form of encryption to make sure that such cases are kept to a minimum. This section will consider some important modern encryption techniques and discuss why they are still used and what makes them stand above other methods.
+
+\subsection{HTTPS}
+HTTPS stands for ``Hyper Text Transfer Protocol Secure". The secure version of HTTP allows transmission of data using public key encryption. It runs on top of the TLS (Transport Layer Security) protocol. It was generally meant for services such as online banking, but it gained popularity in other services like social networking, emailing, and video streaming \cite{HTTPSCosts}. Websites using HTTP have a 'certificate' that proves that they are who they claim to be. To ensure the certificate's validity, the server signs a message with its certificate's private key and major web authorities such as the IETF (Internet Engineering Task Force) certify the authenticity of the connection. \\[6pt]
+High-level security is good, but comes at a price. To start with, data passing through additional encryption layers makes traffic much slower - it is both time-consuming and computationally expensive. As much as the methods themselves protect the users, their energy consumption is huge, considering the additional handshake required between the client and the server and all the mathematical calculations required (e.g. generation of cryptographic keys). In terms of speed, HTTPS is much slower than the HTTP and consumes much more power, especially on devices using 3G connections (p.134, Introduction) \cite{HTTPSCosts}. In addition, the latency on the client side is very likely to go up. One of the solutions is using solid GPU architectures to reduce calculation time and latency, but creating this takes substantial time and resources (although manageable). No matter the costs, many Internet services have migrated to HTTPS services due to the much stronger security, aimed at guaranteeing end-users privacy. For instance, YouTube has been delivering more than 50\% of its services on top of HTTPS as well as Facebook, which enabled HTTPS for all users in 2013 (p. 134, HTTPS Usage Trends) \cite{HTTPSCosts}.
+
+\subsection{SSL and TLS}
+SSL (Secure Socket Layer) is a protocol designed to secure traffic on the Web, but has recently been replaced by the TLS standard. It is a cryptosystem that uses both symmetric and public key encryption. This is the most commonly used cryptosystem and although many flaws have been discovered, its current version is secure enough. For example, SSL 2.0 lacked a client-server handshake authentication (both sides agreeing on what secret keys to use for communication), i.e. both sides did not need a certificate to verify that they are indeed the ones who they claim to be. This made the layer vulnerable to downgrade attacks, where a man-in-the-middle can modify the ciphers used in the handshake - if he makes them insecure, it would be easy to eavesdrop on communication and obtain sensitive data \cite{Crypto101}. This is why the use of SSL 2.0 for establishing client-server connection is prohibited by the TLS implementations \cite{SSL2Support}. \\[6pt]
+The question here is how the certificates work. The TLS clients usually come with a list of trusted certificate authorities, integrated in the web bowser used on his operating system. Basically when a client connects to the server, the server provides a chain of certificates and if the web browser can recognise any of the certificates from the server, they are being verified by signing them in. Figure 6 illustrates in details how authentication is carried out. \\[6pt]
+
+\begin{center}
+\includegraphics[width = 0.6\textwidth]{Handshake_Overview.png}
+\captionof{figure}{TLS Handshake \cite{HandshakeOverview} \\[6pt]}
+\label{fig:Tor}
+\end{center}
+In general, the client wants to send a message to the server, including the cryptographic information such as the version of SSL and TLS. The server then responds with a message that includes the server certificate. Once verified by the client, both sides exchange keys and share some secret key information. Finally, when an agreement is reached, both the client and the server can communicate. More details can be found in IBM's knowledge center site \cite{HandshakeOverview}. 
+
+\subsection{The Onion Router}
+This will be one of the main focuses on the project. Following the brief introduction to the Tor browser in the previous sections, it will now be expanded. This is a perfect example of a solid modern encryption, due to the fact that the browser has been functioning properly for 15 years now. Due to its strong level of security, it allows any form of activities in the Internet, including crimes, underground movements, and even CP. The fact that such activities are still going on and anonymity is dominating, makes Tor the perfect candidate for modern security. \\[6pt]
+To summarise, Tor is a web browser, written in C, intended to allow users to browse anonymously. This is achieved through several layers of encryption in the application layer. The IP address is nested deeply, just like the layers of an onion, which is where the browser's name came from. When a user sends a request for a website, it is being sent randomly among several nodes (volunteering computer hardware) before reaching the destination server - this is the same technique as sending a request to a website in the clear web, with the difference that the nodes' IP addresses are not public and encrypted. Only the destination is able to decrypt the content and once it does, it sends a response back to the client in a similar fashion \cite{TORInfo}. The Tor nodes can either be operated by an organization or an individual. So the more nodes there are, the more stable and secure the connection is. A client request would pass through at least three relays before reaching its destination. The first and middle relays receive data, unpack it just to see where to send it to and then re-wraps it again. Having such a relay is safe to run at home, even on your own machine, since it can never be suspected as the traffic source. The exit relay on the other hand is the last one through which data passes before it reaches the server. The IP address of the final relay is interpreted as the source from which the request is given, so would take the blame in case of illegal activities being investigated. This means that it would not be a good idea to run your PC as an exit relay as it is highly probable to attract the attention of law enforcement agencies. Instead, it should rather be a machine in a hosting facility that is aware that the server is running an exit node (e.g. a big corporation machine). \\[6pt]
+As always, solid encryption comes at a price. Tor is essentially a variation of HTTPS, which as discussed, is quite slow compared to a regular connection. And the fact that a Tor connection would pass through several nodes makes it even clumsier. The relays' security is vital for data traffic - individual nodes could be storing personal information, which could be risky and removes any benefit of using Tor.
+
+\subsubsection{.Onion Domains}
+The Domain Name System (DNS) is a critical component of the Internet, that allows clients to match domain names with a site's IP address, thus allowing easier search (p. 173, Introduction) \cite{OnionLeak}. Most of the websites accessed through the Tor browsers use ``.onion" domains instead of ``.com".  This indicates that servers have the ability to host content without having an IP address, which would reveal their location. Thus tracerouting such websites is not possible (p. 173, Introduction) \cite{OnionLeak}. Neither the client, nor the website server know each other's IP address - the only IP address known is the exit relay's one. Moreover, Tor is decentralized by nature - websites do not have an official centralised directory, where a user can get a list of available services. The communication in Tor is concealed enough and every hop in the circuit reduces the chance of communicating peers being tracked through network surveillance, which would rely on the source and destination's IP address. The ``.onion" websites' names are usually encrypted as well and end up for the user as a combination of random letters and numbers (e.g. \textit{http://kpvz7ki2v5agwt35.onion}, which in particular is a Wiki page containing some form of unofficial directory, i.e. list of deep web sites). The Tor browser does not allow history and bookmarks, so the site's domain has to be typed in every time access is required. As mentioned, it is thought that the primary usage of such an environment is to allow carrying out illegal activities. This is absolutely not true - its original purpose was to protect the U.S. intelligence communications online, but due to its ease of access, its usage has significantly expanded. The dark web does indeed have many different types of websites such as social networking, forums with limitless scope of discussion topics, political propaganda, and much more - all of which is somewhat intriguing, eye-catching and interesting.
+
+\section{Cryptocurrency}
+Cryptographic currency, or Cryptocurrency, is an alternative to real-value currencies such as USD and GBP, whose popularity has increased rapidly in the past few years. It is a decentralized digital currency, not controlled by entities like banks, but are based on an open-source peer-to-peer IP. They allow instant and anonymous transactions between people using a system secured by a proof-of-work system aided by advanced cryptography algorithms (p. 1700, Introduction) \cite{CryptoCurrencyIntro}. The most famous digital currency is the \textit{Bitcoin} (BTC), introduced in 2009 by Satoshi Nakamoto. It is an innovative payment network and a new kind of money. As mentioned, there are no central authorities or banks - all transactions are carried out collectively in the network. Bitcoins allow exciting uses that could not be covered by any previous payment systems. To start with, there are no transaction fees - the currency's public design means that no one owns it, so everyone can take part with no costs. It is a global currency, so can be used in every country and bought with any currency. Every user has a digital wallet and transactions are recorded in a transparent public database. Nowadays more and more websites and companies integrate the use of Bitcoins in their systems \cite{BitcoinIntro}.
+
+\subsection{Why Bitcoin?}
+Bitcoins have several advantages compared to official currencies. The most notable are:
+
+\begin{itemize}
+\item{\textbf{Decentralized services and reduced fees - }}Bitcoins are not stored in a central repository, so fees are significantly reduced. The system is peer-to-peer based, which makes transactions much faster than the normal ones.
+\item{\textbf{No Personal Data Storage - }}Although all transactions are stored in one huge database, privacy and security is to a great extent enforced with encryption techniques. Every user has one or more wallet addresses as well as a private key used for transaction authorisation. Instead of personal information, Bitcoin uses a distributed ledger book system called ``blockchain" \cite{WhatIsBTC}. When transactions are made, they are sent to a particular unique wallet address, not to a specific person. So the only identifying information in this case would be the random characters contained in an address. The benefit is that a user can always change his/her address for every transaction and this is actually preferable, since using the same one repeatedly would act as a link to the person in the long run.
+\item{\textbf{Transaction verifications validate security - }}Transactions are verified through ``mining", which is one of the methods of producing Bitcoins. In short, these are Bitcoin miners that check whether a transaction's encryption is strong enough so that it can be verified. After each verification, miners are rewarded Bitcoins. Due to the rewards, Bitcoin mining has turned into a highly demanded profession. This is to some extent good for Bitcoin users, because the more miners, the more secure and resistant are the blocks to an attack. Invoking an attack would mean that the attacker has to hash a transaction faster than the entire network, which is almost impossible, considering that it produces around 1500 floating point arithmetic operations per second. So unless there is a malicious software that can break the encryption algorithm and outspeed the network, using bitcoins is generally safe in that respect \cite{WhatIsBTC}.
+\end{itemize}
+
+\subsection{Disadvantages of Bitcoin}
+Although security is always kept at a decent level, Bitcoins have their own disadvantages. The most fundamental ones are: 
+
+\begin{itemize}
+\item{\textbf{Volatility - }}Bitcoin is a very unstable currency due to its young economy, i.e. its value might change rapidly and unexpectedly. For example, in November 2015, the BTC's value was around \$321.00, while a year later it has risen to \$737.16, which is close to 150\% increase \cite{BTCDesk}. The fact that it is so volatile means keeping Bitcoin savings in the long run is very risky, so it would be better to buy the exact amount of Bitcoins required for a purchase instead of investing thousands, which could have serious consequences. 
+\item{\textbf{Irreversible Payments - }}Payments can only be refunded by the person receiving the fund. This means that one should only make transactions to trustworthy sources with a good reputation - sending money to unverified people/organisations is not recommended. 
+\item{\textbf{Identity Link to an Address - }}One should be careful with accidentally linking him-/herself to a wallet address, as mentioned. Manually or automatically, it is strongly recommended to always change the address every for every transaction carried out. Unfortunately, this is something that requires decent knowledge of technical skills, so not every user would be able to do it easily (p. 43, Weaknesses of Bitcoin) \cite{WhatIsBTC}.
+\item{\textbf{Government Taxes and Regulations - }}Bitcoin is a first-generation cryptocurrency and is reliant on third parties for establishing trade and purchase - often these parties are immature enough to really offer what the Bitcoin protocol does. It is not an official currency, but has a value. That said, it is a lawful requirement to pay taxes on everything with a value - although transaction fees are significantly reduced, taxes can still be an issue.
+\item{\textbf{Legal Issues - }}This is another important aspect to mention. Due to Bitcoins' nature, it facilitates illegal trade in the black market of drugs, weapons, hacking services, etc. Essentially, using Bitcoins is not illegal - it is a decentralized peer-to-peer system, just like paper cash. What they are used for has nothing to do with the way they work. The problem is that its direct 'relation' to the black market often attract media that can create false ideas to the public of what cryptocurrencies actually are \cite{WhatIsBTC}.
+\end{itemize}
+Our economy is rapidly changing and so are Bitcoins - hopefully in the long run their reliability and security will increase and the issue of volatility be brought down to minimum.
+
+\subsection{Nature and Ethics of Cryptocurrencies}
+This section is to be expanded after the literature review submission.
+
+\section{Implementation Plans and Technology Review}
+This section will focus on the implementation plans based on some technology background. The idea in the beginning was an improvement of an existing encryption algorithm used within the Tor browser. However, as the research progressed, some very interesting and relevant papers changed this idea. Currently, the major problems with Tor are the speed and traffic leakage in the global DNS. The plan is to investigate and discuss the currently used algorithms, their bottlenecks, express a view on the big picture and propose a solution. It would make more sense to create a real-time programme, that measures the level of security while a user is browsing in TOR. Creating a new algorithm would take a huge amount of time, need permission to get access to official source code of other algorithms and it is not certain whether the implementation would be any better than the existing ones. \\[6pt]
+After doing some research, it turned out that Tor has a built-in addon called "NoScript" that performs real-time security tracking. It has the option of disabling any plug-ins, establishing new identities on every connection as well as displaying different types of warnings. After jumping through different ideas, the final stop is to work on a Tor community project called ``HTTPS Everywhere" - there is a breakdown in section 5.3. If implementation is not sufficient at the end due to specific circumstances, there will be at least a detailed explanation of the idea and future work.
+
+\subsection{Technical Background}
+Some technical background knowledge is essential in order to successfully carry out an implementation. This subsection contains results analysis from some papers. The focus will be on researching and discussing software systems that measure the security and leakage of \textit{.onion} domains. Data leakage clearly presents an issue to Tor users and needs to be explored. Anonymity browsers are vulnerable to traffic correlation attacks, where an adversary is monitoring the entry and exit node (p. 1626, Introduction) \cite{AnonymityImpactonTor}. There are two fundamental methods of exposing security on Tor:
+
+\begin{itemize}
+\item{\textbf{Network Adversary Model - }}Such models aim at gathering data in nodes between a client and a server - the more data obtained, the less secure the browser is. Data gathering is often subject to user settings, which are often ignored by most people using Tor. This is done through traffic analysis using a certain behaviour - an adversary would usually act as a relay in order to monitor data more easily. The important point here is the adversary's resource endowment, i.e. how many resources to allocate so that the traffic correlation attack can be carried out effectively \cite{TORAnalysis}. The most valuable resource is bandwidth. This is because a node route from a client to server is usually chosen based on how much bandwidth is each relay capable of storing and transferring to the next one. The higher the bandwidth, the bigger the probability for this specific node to be chosen. Several user models exist in order to maximise efficiency, depending on the type of traffic in Tor. For this project, some models and attack scenarios will be discussed that would help analysing Tor's resilience against the attacks.
+\item{\textbf{Distributed Denial of Service Attack - }}Performing a deliberate attack of this kind is a method of revealing weaknesses in client/server communication and based on the results, aim to improve it. For example, some of the attacks aim at increasing Tor's latency, which by default is higher than normal networks, due to the additional security layers. An increased latency means reduced quality of service - such attacks would not only obtain traffic data, but would also dissuade users from using the network. Latency can be measured in ``ttfb" (time to first byte) and ``ttlb" (time to last byte). A function $L_u(r)$ is defined, that returns the latency of route \textit{r} chosen by user \textit{u} (p. 97, Tor's Resilience in Terms of Latency) \cite{TorResilience}.
+\end{itemize}
+
+\subsection{Torchestra: Reducing Interactive Traffic Delays Over Tor}
+Apart from data leakage, there are other methods for reducing interacting traffic delays over Tor. Recall that Tor traffic is much slower than the one in the clear web due to the multi-level encryption and the nodes controlled by user entities. This means that the bandwidth for each node is different and dependent on connection speed and hardware properties. A method by Gopal and Heninger \cite{TorTrafficReduce} seems to have a potential solution over the delay issues. \\[6pt]
+The Torchestra approach aims at creating two separate connections between each pair of nodes. Ideally it separates bulk and interactive traffic. The interactive one would be prioritised by having a separate socket and output buffer from the bulk - congestion is minimised, which will improve Tor's light traffic performance. A method called \textit{Exponentially Weighted Moving Average} (EWMA) by Tang and Goldberg (p. 331, Section 2.3) \cite{TorCSAlgorithm} seems suitable for the facilitating Tor traffic. From reading different papers with potential solutions, EWMA looks the most promising - the formula is not difficult to understand and results show that if implemented properly, node traffic will be significantly reduced, leading to a better connection. It calculates a moving average of the number of cells sent on a circuit and adds greater weight to recent values. Circuits begin moving to the light traffic and depending on the data threshold, might move to heavy and the other way round. The question here is how to decide whether a circuit should be put for light or heavy traffic. This is done by the exit node. To start with, EWMA for a given period of time \textit{t} needs to be calculated, given by the formula below.
+
+\begin{equation*}
+EWMA(t) = \alpha \; \cdotp \; Y (t) \; + \; (1 - \alpha) \; \cdotp \; EWMA(t - 1)
+\end{equation*}
+\textit{Y(t)} is the data observed for time \textit{t} and $\alpha$ is a constant between 0 and 1 that determines the depth of memory of EWMA. It represents the degree of weighting decrease. The rate at which older data enters into the calculation of EWMA is determined by $\alpha$. For example, if $\alpha$ has a large value (e.g between 0.5 and 1), there will be more weight to recent data and less to the older data - smoothing will be quick. A value closer to 0 on the other hand, EWMA's value will be more heavily influenced by older observations as well as slower smoothing \cite{EWMACC, SES}. \\[6pt]
+Deciding whether a circuit belong to the light or heavy connection is determined by threshold values $T_l$ and $T_h$. If a circuit's EWMA is larger than $T_l$ times the average EWMA for the light connection, it will be moved to heavy - the reverse procedure is done for moving circuit from light to heavy. When a client request for a website is given, data cells are sent through circuits from source to destination and then reverse (in this case from the exit node, through the middle, followed by the entrance one). The procedure is explained in Gopal and Heninger's paper \cite{TorTrafficReduce} step by step:
+
+%\begin{quote}
+\begin{enumerate}
+\item{\textit{Check whether a heavy connection has been created between exit and middle router. If not, create a new connection.}}
+\item{\textit{The exit node sends a \texttt{SWITCH} cell on the light connection to inform the middle node that no more cells for this circuit will be coming in on this connection.The payload in the \texttt{SWITCH} cell contains a flag that the exit node sets to inform the middle node that it needs to extend the heavy connection towards the entrance. The exit node continues to receive cells from the middle node on the light connection.}}
+\item{\textit{The exit node sends a \texttt{SWITCHED\textunderscore CONN} cell on the heavy connection followed by the circuit's cells.}}
+\item{\textit{Once the middle router has received both the control cells, it sends a \texttt{SWITCHED} cell on the light connection and only then does it start processing the circuit's cells from the heavy connection. The cells that might have arrived on the heavy connection before the \texttt{SWITCH} cell arrived on the light connection are saved in a queue and these cells are processed once both the control cells are processed. This completes the circuit switch on the middle node.}}
+\item{\textit{After the exit node receives the \texttt{SWITCHED} cell on the light connection, no more cells for this circuit will be coming from the middle node on this connection. It completely switches the circuit to the heavy connection. The cells that might have arrived on the heavy connection before the \texttt{SWITCHED} cell arrived on the light connection are saved in a queue and these cells are processed once the \texttt{SWITCHED} cell has been processed.}}
+\end{enumerate}
+%\end{quote}
+Experiments in the paper were performed using Tor emulation toolkit that simulates an entire network. Details about the results can be found in the ``Experimental Results" section \cite{TorTrafficReduce}.
+
+\subsection{Examples with Results}
+Some examples are given in order to better understand the concept of traffic reduction. One is taken from Gopal and Heningber's paper \cite{TorTrafficReduce}, where web traffic is simulated, and the other one is from Arkhoondi et al \cite{LASTor}, in which a low-latency Tor client is developed.
+
+\subsubsection{Simulating Web and SSH Traffic}
+This is a useful method for representing real traffic patterns. Sessions were made with the help of \textit{Wireshark}, a widely-used network protocol analyzer. It allows monitoring network traffic on a really low level and has been a standard for the government and other enterprises \cite{Wireshark}. Wireshark traffic was replayed as a light one on the background of some heavy clients downloading files of roughly 100MB. Experiments were performed on the original Tor, prioritized, and Torchestra with a Java process to simulate traffic timings. The process \textit{creates a separate thread for every circuit ID to be simulated, each of which is created with a different IP address and listens on different sockets. The ExperimenTor source clients connect to each of these threads' sockets through Tor. Every thread maintains a table of cell transmission times, and sleeps for the appropriate interval after sending a cell.} More information including results can be found in the paper from which the example is taken (p. 36, section 5.3) \cite{TorTrafficReduce}.
+
+\subsubsection{LASTor: A Low-Latency AS-Aware Tor Client}
+Tor is famous for its relatively low-level latency communication, compared to other browsers facilitating anonymity (e.g anonymous Google Chrome). However, latency may increase in the desire to secure anonymity. For example, when a client requests a website, a tunnel is established at both ends with three relays in between. The relays may turn out to be at a very large distance from each other, which would result in high overall latency. Improvements on the client-side can be made to achieve low latency and preserving security by making an efficient path-finding algorithm. This is indeed the Low-Latency Tor client (p. 1742, section I) \cite{LASTor}. \\[6pt]
+To begin with, the client must be resilient to attacks from an autonomous system (AS). Such systems are able to analyse traffic from the client to the entry node and from the exit node to the server. The LASTor client should be aware of Internet routing between relays and end-hosts. The point is to predict a set of ASs through which the Internet may route traffic between a pair of IP addresses. However, there might be some users that would not like the tradeoff of reduced anonymity for reduced latency (p.1743, section I) \cite{LASTor}. Ideally, the LASTor would enable a user to choose a value between 0 (lowest latency) and 1 (highest anonymity) for a single parameter that would indicate the algorithm to choose an appropriate path. Keeping the right balance is what makes the implementation difficult - choosing geographically shorter paths without significantly compromising security. Latency is measured by visiting several world-famous websites through both LASTor and conventional Tor client. In addition, AS-level routes are used to measure LASTor's ability of avoiding them. The results in the paper show that the low-latency Tor client missed only 11\% of the possible AS-level routes, while the conventional client ended with a significantly higher rate of 57\% (p. 1743, section I) \cite{LASTor}. The overview of techniques used to build LASTor are displayed as a table in Figure 7.
+
+\begin{center}
+\includegraphics[width = 1.0\textwidth]{LASTor_Goals.png}
+\captionof{figure}{Goals and Techniques for LASTor \cite{LASTor} \\[6pt]}
+\label{fig:Lastor}
+\end{center}
+The table is just a basic explanation of the techniques. More details can be found in Akhoondi and Yu's paper \cite{LASTor}.
+
+\section{HTTPS Everywhere}
+Project implementation involves working on a community project called ``HTTPS Everywhere". It is a collaboration between the Tor community and the Electronic Frontier Foundation (EFF). ``HTTPS Everywhere" is a browser extension that enables secure client-server communication with websites. This is achieved through rules, written in JavaScript and XML. Many websites nowadays do not provide safe connection, making the user vulnerable to data traffic analysis, which has the risk of sensitive information access. The project cannot ensure that the website server has HTTPS enabled, but can at least encrypt all connections to it from clients \cite{HTTPSEW}. \\[6pt]
+The project is open-source and uses Git as a repository to allow commitments from multiple entities. The so-called rulesets are a combination of rules in XML that describe the behaviour of a website. Regular expressions are used as a primary means of logic - this allows covering most of the sites' domains and subdomains (with the help of wildcard symbols). In addition to covering the site's subdomains, it is strongly advisable to secure images as well as any existing external links that would send the user to another website. There is a certain style guide that needs to be followed and a set of requirements need to be fulfilled before making pull requests, asking for approval. \\[6pt]
+Testing is performed with an automated checker that runs some basic tests on all rulesets. More information about the testing and the project in general can be found in the ``HTTPS Everywhere" website \cite{HTTPSDetails}. A ruleset example is illustrated in Figure 8.
+
+\begin{center}
+\includegraphics[width = 1.0\textwidth]{Ruleset_Ex.png}
+\captionof{figure}{Ruleset Example \\[6pt]}
+\label{fig:Ruleset}
+\end{center}
+The individual contribution will include all rulesets written by myself that were approved and deployed into the extension. The section will focus on testing and results as development progresses.
+
+\subsection{Development of HTTPS Everywhere}
+This is the part, where I am talking about my personal contribution and things I have done so far in regards to implementation. Rulesets are written in XML and need to be thoroughly tested before making pull requests to the master branch. Initially, the repository is cloned locally to my desktop and library dependencies such as selenium, lxml, python-Levenshtein and regex need to be installed. This is facilitated through a batch file called \textit{install-dev-dependencies.sh}. This is followed by running all tests for common rulesets mistakes in a standalone Firefox and Chromium profile. Finally, extensions are built for Firefox and Chromium, so that testing validation is possible for both web browsers. \\[6pt]
+Rules can either be manually created or via an executable that has a ruleset template. There are convention standards to be followed for best practice as well as a guide on how to efficiently perform testing. Overly complex regular expressions and left wildcard targets are not desirable since they do not always capture all of the website's subdomains. Once all tests have passed, changes can be pulled to the master branch. The repository contains some scripts for automated testing, but manual tests can be applied in any XML file for specific DNS addresses (shown in Figure 9). \\[6pt]
+I used a virtual machine running Ubuntu 16.04 - Linux was easier to work with due to the nice and easy setup of dependencies and libraries. I started by writing a sample ruleset for the website \textit{testyourmight.com}. The tests failed the first couple of times, but they are now working and my pull request to the master was approved. So from now on a user is automatically redirected to the HTTPS version of the website any time it is requested. My idea is to create a crawler that would have a list of websites and create rules for those that are not automatically redirected to their HTTPS version. It is currently under research and more work will follow. The first ruleset written by myself looks like this:
+
+\begin{center}
+\includegraphics[width = 1.0\textwidth]{TYM_Ruleset.png}
+\captionof{figure}{Ruleset for \textit{testyourmight.com} \\[6pt]}
+\label{fig:TYMRuleset}
+\end{center}
+
+\subsection{Web Crawling}
+Web crawlers, also referred to as robots, are programmes, used for exploring web applications automatically by navigating through them (p. 40, Section 1) \cite{WCHistory}. It is a client-server interaction that allows a user to fetch web content. Search engines are examples of web crawlers.\\[6pt]
+I created a web crawler that retrieved a list of domains for gaming websites and check which ones supported HTTPS. Once obtained, all websites without automatic HTTPS redirection had a ruleset created. The language of choice was Python for a couple of reasons:
+
+\begin{enumerate}
+\item{Python supports libraries that scrape web pages really well, such as \textit{Lxml}, \textit{Selenium}, and \textit{BeautifulSoup}.}
+\item{Excellent support for HTML parsing and regular expressions.}
+\item{For the project purpose, it was easy and fast to extract domain names, as this was all the information needed.}
+\item{I had prior experience with Python both from university and placement year.}
+\end{enumerate}
+I am started by testing a simple web crawler for extracting hyperlinks from a website's page. It is a ``traditional" crawler that obtains a list of websites and manipulates them accordingly (p. 42, Table 1) \cite{WCHistory}. The idea is broken down in the next paragraph. \\[6pt]
+\textbf{Libraries:}
+
+\begin{itemize}
+\item{\textit{Urllib/Urllib2} - the most important module. It opens a communication link with a URL. Once established, it returns information about the link, usually the website's HTML header. \textit{HTMLParser} is a library that extracts all the text from a webpage using your own parsing specializations. The parser contains submodules to preserve the structure of the original HTML and then search the data needed.}
+\item{\textit{BeautifulSoup} - very practical, powerful, and flexible, most commonly used to extract all the links from a single page. The crawler speed depends on the code efficiency and the internet connection.}
+\item{\textit{DryScrape} - an open-source Python library used for scraping Javascript-heavy webpages. Useful for my crawler's purposes. Documentation: \cite{DryScrape}}
+\item{\textit{Selenium} - another Python library for dynamic webpages that allows to wait a specific amount of time until a condition is met. Documentation can be found at \cite{Selenium}}
+\end{itemize}
+\textbf{Ideas and experiments so far:}
+
+\begin{itemize}
+\item{The crawler extracts all the \textit{href} links from \textit{http://www.ranker.com/list/best-gaming-blogs-and-websites/blog-loblaw}.}
+\item{I have used a top-down approach, where all hyperlinks found on a single page are accessed recursively until all of them are opened. This will not be necessary in the long run, since most links can just be referring back to the previous page and will eventually get stuck into an infinite loop. This was done just for testing.}
+\item{The main point is to generate a list of \textit{.com} or \textit{.net} domains that support HTTPS and create rulesets for the sites not automatically redirected to their HTTPS versions. Getting such list usually requires budget, but I managed to find a way to do it without using any. I got the list of domains from the gaming site \textit{ranker.com}.}
+\item{HTTPS Everywhere has an atlas of all websites that have rulesets implemented. Ideally, comparing a list of HTTPS supported websites with the ones in the atlas would be an optimal method to check which sites need rules. This is under active investigation.}
+\item{An alternative for checking HTTPS availablity for websites is using an SSL checker through \textit{https://www.sslshopper.com/ssl-checker.html/}, which diagnoses any problems with a site's SSL certificate. An input can be given from the list of gaming websites and check if they actually support HTTPS.}
+\end{itemize}
+\textbf{General Issues:}
+
+\begin{itemize}
+\item{Robustness - HTTP error code 403, 404, etc. This happens either when crawlers are banned by the host website or is recognized as malware and denies access. Can be fixed by writing a more efficient code and authenticating to the \textit{robots.txt} file of the given website with a valid signature.}
+\item{Lack of HTTPS Support - If a website does not support HTTPS, nothing could be done using the browser add-on, unless it was spoken to the site host directly, but this was out of the project scope.}
+\item{Loss of Internet Connection - Crawling took a considerable amount of time and if connection was lost, it terminated and had to be run again. Having a solid ethernet connection minimised the risk, but was not always possible due to hardware limitations.}
+\item{Timeout - Sometimes checking HTTPS support for some websites took too long. I have set the limit to 40 seconds for time efficiency purposes. If returning results took more than 40 seconds, I assumed that the site did not support HTTPS and therefore did not shortlist it. Running the crawler on a server and multithreading could increase efficiency, but was not urgent.}
+\item{Others - Errors such as directing to a different domain when trying to open a website have occured. Due to time constraints, I was not able to fix them.}
+\end{itemize}
+
+\subsubsection{Functionality}
+The web crawler functions the following way:
+
+\begin{enumerate}
+\item{Obtain a set of domains from \textit{http://www.ranker.com/list/best-gaming-blogs-and-websites/blog-loblaw}.}
+\item{Check if each website supports HTTPS via \textit{https://www.sslshopper.com/ssl-checker.html}.}
+\item{Compare the websites that support HTTPS with the ``HTTPS Everywhere Atlas", found in \textit{https://www.eff.org/https-everywhere/atlas/}.}
+\item{Create a ruleset for each website not in the atlas.}
+\item{Modify or extend the rules for certain websites containing several subdomains.}
+\item{Test the rulesets - if they pass all the requirements, make pull request to the master branch and wait for approval.}
+\end{enumerate}
+
+\subsubsection{Crawler Code Sample and Graphical Representation}
+My crawler starts by opening a dryscrape session and scraping through \textit{http://ranker.com}. Domain names are then extracted and stored in a list. Each domain is checked for HTTPS support using Selenium in \textit{http://www.sslshopper.com/ssl-checker.html}. The ones supporting HTTPS are shortlisted and compared to the HTTPS Everywhere atlas to check if they already have a rule using \textit{BeautifulSoup}. For the ones that do not, rulesets are created through bash command \textit{bash ./make-trivial-rule sitename.com} using the \textit{subprocess} library that allow the execution of bash commands in a script. \\[6pt]
+Once created, rules are manually modified to handle all subdomains for every website as long as they support HTTPS. The project has some scripts for automated rules testing in Firefox, Chromium and the ability to test each rule separately. Once all tests have passed the criteria for formatting and functionality, changes were committed to my online repository. Finally, pull requests are opened to the origin master and wait for approval. Automated scripts were run on every new change, so the approval process took roughly 10 minutes.
+
+\subsubsection{Prerequisites}
+In order to run the web crawler, some prerequisites are required:
+
+\begin{enumerate}
+\item{\textbf{Python 2.7} (might not work on 3.4).}
+\item{\textbf{BeautifulSoup v4} - bs4.}
+\item{\textbf{Lxml}, \textbf{Xvfb}, \textbf{QtWebkit 5}}
+\item{\textbf{Selenium 3.4} or greater \cite{Selenium}.}
+\item{\textbf{Pyvirtualdisplay - }A python library that creates a virtual display without necessary been visible. I have used it to save time when opening webpages with \textit{Selenium} as it opens the browser by default and waits for the page to fully load before returning any results.}
+\item{\textbf{Dryscrape - }A dynamic webpage scraping library, downloaded from \cite{DryScrape}. No official support for Windows, but should work with cygwin.}
+\item{\textbf{Geckodriver - }A proxy for using W3C WebDriver-compatible clients to interact with Gecko-based browsers. This program provides the HTTP API described by the WebDriver protocol to communicate with Gecko browsers, such as Firefox. It translates calls into the Marionette automation protocol by acting as a proxy between the local- and remote ends. Can be downloaded from \cite{Geckodriver}.}
+\end{enumerate}
+
+\subsubsection{Issues, Bugs, and Fixes}
+Throughout the implementation, I faced a lot of issues. Below are the most notable ones.
+
+\begin{itemize}
+\item{\textbf{Generating a list of domains - }My initial idea was to grab some from \textit{registered-domains-list.com}, but it turned out that the newly registered ones were either for sale or did not support HTTPS at all. Thus, they did not do any work for the project. At the end, I switched to making a list of gaming related websites - there are thousands of that kind, many of which have HTTPS support.}
+\item{\textbf{Check for HTTPS support - }Checking for HTTPS support in \textit{https://www.sslshopper.com/ssl-checker.html} was another major issue. The page is dynamic, i.e. contains scripts executed at runtime. My crawler was not able to find the tables containing the necessary information for HTTPS support. It turned out that \textit{BeautifulSoup} and \textit{urllib} do not have Javascript support, so can only scrape the static HTML code of a webpage. It took me some time to figure out a solution, but \textit{dryscrape} seemed to do the job. This is a lightweight web scraping library for Python created by Niklas Baumstark. It uses a headless Webkit instance to evaluate Javascript on the visited pages. This enables painless scraping of plain web pages as well as Javascript-heavy “Web 2.0” applications such as Facebook and other dynamic webpages \cite{DryScrape}. It works for Mac OS X, Ubuntu and Arch Linux. \\[6pt]
+When visiting a URL, \textit{dryscrape} waits for the page to fully load before returning the HTML body. After a couple of experiments, I found some memory leak issues. Every time a session is created, it spawns a new webkit server that does not get killed unless specifically stated at the end of the script. Thus my crawler got slower after every iteration and eventually threw a TimeOut error. Fortunately, this was quickly found and fixed.}
+\item{\textbf{Selenium Python versus Dryscrape - }Dryscrape seemed to have some issues of waiting for a dynamic web page to load. Its documentation states that it waits for the page to fully load before it returns its HTML content, but timing was limited to ~30 seconds. Some websites took longer for the table to load and \textit{dryscrape} did not wait long enough. Therefore I could not get sufficient information for websites with no SSL certificate (certificate used by HTTPS websites verifying that the host is indeed the entity it claims to be). \\[6pt]
+An alternative solution was to use \textit{selenium}, another Python library for scraping Javascript-heavy webpages. It opens a Chrome or Firefox browser, waits specific time for the page to load, then crawls and returns its content. The library has a very useful method called \textit{WebDriverWait()} that waits a given amount of time until an expected condition is met \cite{SeleniumWDW}. For example, the method tells the browser to delay the crawl by 30 seconds to locate a specific element by ID, name, xpath, or class. What I essentially do is to wait 40 seconds to find a table of class \textit{``failed"}, which indicates that the given website does not have an SSL certificate.}
+\item{\textbf{Insufficient/Unavailable Tests -} Some websites such as \textit{https://www.testyourmight.com} prevent crawling access as well as any HTML and other high-level modifications. Due to that, their rulesets cannot be tested, therefore pull requests cannot be approved. A solution could be to talk to the website administrators, but as mentioned, this was out of the project scope.}
+\item{\textbf{Rules Modification - }The command \textit{bash make-trivial-rule sitename.com} creates a trivial XML rule file with just basic target hosts, i.e. \textit{sitename.com} and \textit{www.sitename.com}. Most websites have more subdomains than the two basic ones. For example, the fighting games focused site \textit{shoryuken.com} contains subdomains like \textit{evo, forums, rank, and wiki} that need to be handled. And since subdomains are website-specific, each ruleset needs to be manually modified. \\[6pt]
+The process was time-consuming, but fortunately a tool called \textit{Sublist3r} was available to use. This is a python tool made by Ahmed Aboul-Ela, designed to enumerate subdomains of websites through OSINT. Enumeration is achieved using search engines like Google, Yahoo, Baidu, etc. \cite{Sublist3r}. The script uses bruteforce with an improved wordlist to find as many subdomains as possible. It turned out to be very useful, as it saved me a lot of time and allowed me to handle most of the websites' subdomains.}
+\item{\textbf{Mixed Content Blocking (MCB) - }Some rulesets might trigger active mixed content (i.e. scripts loaded over HTTP instead of HTTPS). Such content is blocked in both Chrome and Firefox before HTTPS Everywhere has a chance to rewrite the URLs to an HTTPS version. This generally breaks the site. MCB is only allowed on Tor browser. This is generally solved by setting by adding an attribute to ruleset element \textit{platform="mixedcontent"} (Tor only), but nothing could be done for Chrome or Firefox for the time being.}
+\item{\textbf{Outdated Domains and Rulesets - }HTTPS Everywhere contains thousands of rulesets written by different entities. In order for a user to make pull requests, all rules have to be tested in standalone Chrome and Firefox profiles. However, some rules contained expired domains and others no longer existed, which caused problems during testing. As most of the tests were automatic, occasionally they did not pass the submission criteria. This prevented the approval of some of my pull requests. Most of the rules of that kind were disabled by default, but exceptions were present. I had to modify and manually disable some of them in order for my commits to be approved, which took off some valuable time.}
+\end{itemize}
+The crawler took some time (10-20 minutes) to do all the necessary checking, but did the job. To make it more efficient, I saved my shortlisted websites in a file, so I could use them to create rulesets with a different script - this saved a lot of time, especially for testing.
+
+\section{Requirements}
+The implementation for the project will involve writing sufficient number of rulesets to websites not automatically redirecting the client to their HTTPS version. Thorough testing using the automated checker will be performed. All of the approved rules will be counted as an individual contribution. Requirements' priorities are indicated with the words MUST, SHOULD, and MAY.
+
+\begin{enumerate}
+\item{The individual contribution must be explicitly shown and clear.}
+\item{The committed changes should be approved and used in the browser extension.}
+\item{Websites not supporting HTTPS server should still be connectible securely by the client - this depends on the browser extension settings.}
+\item{All the websites which have HTTPS deployed must be displayed in the ``HTTPS Everywhere" atlas.}
+\item{The rulesets should be tested and work on both Chrome and Firefox.}
+\item{The code should be efficient and easy to read according to the style guide.}
+\item{Any major changes and tests should be documented and reflected.}
+\item{Credits must be given to the Tor community and EFF as well as any other entities involved in committing changes.}
+\end{enumerate}
+
+%\subsection{Non-Functional Requirements}
+%\begin{itemize}
+%\item{The project should be completed by \date{1st May 2017} (the deadline is \date{5th May 2017}).}
+%\item{Future work section must be included if full implementation is not achieved prior the deadline.}
+%\item{The supervisor should be informed for the project's progress on a weekly basis.}
+%\item{The work plan should be updated frequently depending on the workload.}
+%\item{The code should have a proper documentation and testing.}
+%\end{itemize}
+
+\section{Project Plan}
+The project is split into four milestones (excluding the project approval), shown in the Gantt Chart at the end of the section. Every effort will be made to follow it and it will be updated regularly should there be a fall behind schedule or other issues (e.g. health or personal problems). The workload will be between 12 and 20 hours a week, depending on the time restrictions, such as Christmas/Easter break, exam preparation, and working on other courseworks. Way- and endpoints are also included.
+
+\subsection{Waypoints}
+These are the points that form the objectives. In the best case scenario, which involves excellent time management and consistency, all of the statements would be satisfied.
+\begin{enumerate}
+\item{Major and high priority requirements structured and well-defined.}
+\item{Literature Review completed with credible references.}
+\item{Implementation details sorted out.}
+\item{Programme implementations techniques researched and experimented.}
+\item{Core functionality implemented.}
+\item{Initial rulesets applied to a set of websites.}
+\item{Modifications and testing completed.}
+\item{Project write-up completed.}
+\item{Final remarks and conclusion.}
+\item{Proofreading and double checking.}
+\item{Binding and submitting.}
+\end{enumerate}
+
+\subsection{Endpoints}
+The endpoints are to be followed and completed by the end of the second semester. They cover a smaller area than the waypoints, which would be the case if time is insufficient.
+\begin{enumerate}
+\item{Literature Review completed with credible references.}
+\item{Core web crawler functionality implemented with at least some research and ideas for further applications.}
+\item{Code testing and documentation completed.}
+\item{Research extension and future work achieved and included.}
+\item{Project dissertation completed and proofread with supervisor agreement.}
+\end{enumerate}
+
+\subsection{Gantt Chart}
+\begin{center}
+\includegraphics[width = 1.0\textwidth]{PN_PPlanUpdated.png}
+\captionof{figure}{Project Workplan\\[6pt]}
+\label{fig:PP}
+\end{center}
+
+\section{Future Work}
+%\section{Resources}
+%Resources are vital for carrying out the project successfully. I have divided them into two categories - technical and literature.
+%
+%\subsection{Technical Resources}
+%\begin{itemize}
+%\item{A PC/laptop to do the project on - copies kept on personal laptop and university PCs.}
+%\item{SQL Server Management Studio - for database queries and storage.}
+%\item{Tor Browser - required for searching references, articles, examples, and experiments.}
+%\item{C Compiler - GCC (installed on my laptop).}
+%\item{NetBeans - programming platform.}
+%\item{Additional Languages - HTML5, PHP.}
+%\end{itemize}
+%
+%\subsection{Literature Resources}
+%\begin{itemize}
+%\item{Peer-reviewed articles - e.g. Power and Freedom in the Dark Web, Introduction to Cryptocurrencies.}
+%\item{Books and journals for the dark web - e.g. Exploring the Dark Web, Accessing the Deep Web, etc.}
+%\item{.Onion domain references - might have some valuable information.}
+%\item{Relevant Case studies - e.g. PayPal Account Thefts.}
+%\end{itemize}
+
+\bibliography{FYP_Bibliography}
+\bibliographystyle{acm}
+
+%\begin{enumerate}[label={[\arabic*]}]
+%\item Chen, H., \textit{Exploring and Data Mining the Dark Side of the Web}, Springer: London
+%\item The Tor Project, Inc., \textit{Tor: Overview} [Online]. Available from:\\
+%\url{<https://www.torproject.org/about/overview.html.en>} [Accessed \date{\today}]
+%\item Gehl, R., W., 2016. \textit{Power/Freedom on the Dark Web: A digital ethnography of the Dark Web Social Network} [Online]. 18. Available from:\\
+%\url{<http://nms.sagepub.com/content/18/7/1219.full.pdf+html>} [Accessed \date{\today}]
+%\item Miessler, D. \textit{The Internet, the Deep Web, and the Dark Web} [Online]. Available from:\\
+%\url{<https://danielmiessler.com/study/internet-deep-dark-web/#gs.uT78Z_Y>} [Accessed \date{\today}]
+%\item Hen, B., \textit{et al}, 2016.  \textit{Accessing the Deep Web} [Online]. Vol. 50. Communications in the ACM
+%\item Max, E., 2015. \textit{Inside the Dark Web} [Online]. PC Magazine. Available from:\\
+%\url{<http://web.a.ebscohost.com/ehost/pdfviewer/pdfviewer?sid=3e3b51fa-21a7-427c-9572-4e7b5d3cf09e\%40sessionmgr4009&vid=1&hid=4112>} [Accessed \date{\today}]
+%\item Brooke, Z., 2016. \textit{A Marketer's Guide to the Dark Web} [Online]. Vol. 28(1). pp.23-38. Available from:\\
+%\url{<http://web.a.ebscohost.com/ehost/pdfviewer/pdfviewer?sid=180951be-28ac-46e2-9264-23426c09dd2c\%40sessionmgr4008&vid=1&hid=4112>} [Accessed \date{\today}]
+%\end{enumerate}
+
+\end{document}
+
+
+
